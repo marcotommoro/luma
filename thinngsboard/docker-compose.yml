@@ -1,0 +1,18 @@
+version: "2.2"
+services:
+  mytb:
+    restart: always
+    build: .
+    command: bash start-tb.sh
+    ports:
+      - "8080:9090"
+      - "1883:1883"
+      - "7070:7070"
+      - "5683-5688:5683-5688/udp"
+    environment:
+      TB_QUEUE_TYPE: in-memory
+    volumes:
+      # - ./thingsboard.conf:/etc/thingsboard/conf/thingsboard.conf
+      # - ./thingsboard.yml:/etc/thingsboard/conf/thingsboard.yml
+      - ./start.sh:/app/start.sh:ro
+      - ./start-tb.sh:/start.sh:ro
