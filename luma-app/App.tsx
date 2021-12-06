@@ -1,47 +1,48 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import "expo";
-import { StatusBar } from "expo-status-bar";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import React, { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { StyleSheet, Text, View } from "react-native";
-import { t } from "react-native-tailwindcss";
+import React from "react";
+import { SafeAreaView } from "react-native";
+import {} from "react-native-safe-area-context";
 import { auth } from "./components/auth/firebase.config";
+import { Login, Signup } from "./components/auth/LoginSignup";
+import Home from "./components/Home";
+import PresentationSwiper from "./components/swiper/PresentationSwiper";
+
+const Stack = createNativeStackNavigator();
+
+const AuthRoutes = () => (
+  <Stack.Navigator initialRouteName="Home">
+    <Stack.Screen name="Home" component={Home} />
+  </Stack.Navigator>
+);
+
+const NonAuthRoutes = () => (
+  <Stack.Navigator initialRouteName="Login">
+    <Stack.Screen
+      options={{ headerShown: false }}
+      name="Presentation"
+      component={PresentationSwiper}
+    />
+    <Stack.Screen
+      options={{ headerShown: false }}
+      name="Login"
+      component={Login}
+    />
+    <Stack.Screen
+      options={{ headerShown: false }}
+      name="Signup"
+      component={Signup}
+    />
+  </Stack.Navigator>
+);
+
 export default function App() {
-  const [user, loading, error] = useAuthState(auth);
-  useEffect(() => {
-    console.log("ciao");
-    createUserWithEmailAndPassword(auth, "marco@ciao.it", "12345678")
-      .then((userCredential) => {
-        // Signed in
-        const user1 = userCredential.user;
-        console.log("CIoa", user, user1);
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("erorre", errorCode, errorMessage);
-
-        // ..
-      });
-  }, []);
-
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-      <Text style={[t.text3xl, t.bgBlue800, t.textWhite, t.m10, t.p5]}>
-        CIaoneeee
-      </Text>
-    </View>
+    <NavigationContainer>
+      <SafeAreaView style={{ flex: 1 }}>
+        {!!auth.currentUser ? <AuthRoutes /> : <NonAuthRoutes />}
+      </SafeAreaView>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
