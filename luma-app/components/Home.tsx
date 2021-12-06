@@ -1,4 +1,3 @@
-import { signOut } from "firebase/auth";
 import React, { useContext, useEffect } from "react";
 import { Button, Text, View } from "react-native";
 import { AuthContext } from "./auth/AuthProvider";
@@ -14,8 +13,7 @@ const Home = () => {
   }, []);
 
   const handleSignOut = () => {
-    signOut(auth);
-    console.log("1", auth.currentUser?.email);
+    auth.signOut();
   };
   return (
     <View>

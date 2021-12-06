@@ -1,7 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import "expo";
-import React from "react";
+import { User } from "firebase/auth";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import {} from "react-native-safe-area-context";
 import { auth } from "./components/auth/firebase.config";
@@ -18,7 +19,7 @@ const AuthRoutes = () => (
 );
 
 const NonAuthRoutes = () => (
-  <Stack.Navigator initialRouteName="Login">
+  <Stack.Navigator initialRouteName="PresentationSwiper">
     <Stack.Screen
       options={{ headerShown: false }}
       name="Presentation"
@@ -38,10 +39,15 @@ const NonAuthRoutes = () => (
 );
 
 export default function App() {
+  const [user, setUser] = useState<User | null>(null);
+  auth.onAuthStateChanged((_user) => {
+    setUser(_user);
+  });
+
   return (
     <NavigationContainer>
       <SafeAreaView style={{ flex: 1 }}>
-        {!!auth.currentUser ? <AuthRoutes /> : <NonAuthRoutes />}
+        {!!user ? <AuthRoutes /> : <NonAuthRoutes />}
       </SafeAreaView>
     </NavigationContainer>
   );
