@@ -1,28 +1,13 @@
 import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { color, t } from "react-native-tailwindcss";
-import { auth } from "./firebase.config";
-import {
-  firebaseLoginEmailPassword,
-  firebaseSignupEmailPassword,
-} from "./firebaseUtils";
+import { firebaseSignupEmailPassword } from "./firebaseUtils";
+import { SocialLogin, validateEmail, validatePassword } from "./utils";
 
-const iconStyle = [t.bgWhite, t.p3, t.roundedFull, t.shadowLg];
-
-const SocialLogin = () => {
-  return (
-    <View style={[t.flex, t.flexRow, t.itemsCenter, t.justifyCenter, t.mT10]}>
-      <TouchableWithoutFeedback style={iconStyle}>
-        <AntDesign name="google" size={35} color="black" />
-      </TouchableWithoutFeedback>
-    </View>
-  );
-};
-
-const ChooseRole = () => {
+const ChooseRole = (): JSX.Element => {
   const [selected, setSelected] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -65,11 +50,6 @@ export const Signup = () => {
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<any>();
-
-  useEffect(() => {
-    console.log(auth.currentUser);
-    return () => {};
-  }, []);
 
   const handleSubmit = async () => {
     setSubmitDisabled(true);
@@ -124,82 +104,5 @@ export const Signup = () => {
         />
       </View>
     </View>
-  );
-};
-
-export const Login = ({ navigation }) => {
-  const [email, setEmail] = useState<string>("");
-  const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<any>();
-
-  const handleSubmit = async () => {
-    setSubmitDisabled(true);
-    console.log("validatePassword(password)", validatePassword(password));
-    if (!validateEmail(email) || !validatePassword(password)) {
-      setError("Controlla i dati immessi che non sono corretti!");
-      return;
-    }
-    const error = await firebaseLoginEmailPassword(email, password);
-    console.log("errror", typeof error, error);
-    !!error && setError(error);
-
-    setSubmitDisabled(false);
-  };
-
-  return (
-    <View style={[t.flex, t.itemsCenter]}>
-      <Text style={[t.text3xl, t.mT5]}>Bentornato</Text>
-      <SocialLogin />
-      <Text style={[t.textSm, t.mY10, t.textGray800]}>oppure</Text>
-
-      <View style={[t.wFull, t.pX10]}>
-        {!!error ? (
-          <Text style={[t.textRed600, t.textLg, t.p3, t.bgRed200, t.mB5]}>
-            {error}
-          </Text>
-        ) : null}
-        <Input
-          textContentType="emailAddress"
-          placeholder="Email"
-          onChangeText={(e) => setEmail(e)}
-          leftIcon={<AntDesign name="user" size={24} color="black" />}
-        />
-        <Input
-          textContentType="password"
-          autoCompleteType="password"
-          secureTextEntry={true}
-          placeholder="Password"
-          onChangeText={(e) => setPassword(e)}
-          leftIcon={<AntDesign name="lock" size={24} color="black" />}
-        />
-        <Button
-          disabled={submitDisabled}
-          onPress={handleSubmit}
-          buttonStyle={[t.bgBlue500]}
-          title={"Login"}
-        />
-        <Text
-          style={[t.mT5, t.textRight]}
-          onPress={() => navigation.navigate("Signup")}
-        >
-          Non sei ancora registrato?
-        </Text>
-      </View>
-    </View>
-  );
-};
-
-const validateEmail = (email: string) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
-
-const validatePassword = (password: string) => {
-  return String(password).match(
-    "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})"
   );
 };

@@ -1,3 +1,5 @@
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import "expo";
@@ -5,17 +7,82 @@ import { User } from "firebase/auth";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import {} from "react-native-safe-area-context";
+import { colors } from "react-native-tailwindcss";
 import { auth } from "./components/auth/firebase.config";
-import { Login, Signup } from "./components/auth/LoginSignup";
-import Home from "./components/Home";
+import { Login } from "./components/auth/Login";
+import { Signup } from "./components/auth/Signup";
+import Crypto from "./components/pages/Crypto";
+import Data from "./components/pages/Data";
+import Home from "./components/pages/Home";
+import Profile from "./components/pages/Profile";
 import PresentationSwiper from "./components/swiper/PresentationSwiper";
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const AuthRoutes = () => (
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen name="Home" component={Home} />
-  </Stack.Navigator>
+  <Tab.Navigator
+    initialRouteName="Home"
+    defaultScreenOptions={{ tabBarShowLabel: false, headerShown: false }}
+  >
+    <Tab.Screen
+      name="Home"
+      component={Home}
+      options={{
+        tabBarIcon: ({ color, focused }) => (
+          <AntDesign
+            name={"home"}
+            size={focused ? 40 : 30}
+            color={focused ? colors.green : colors.blue500}
+          />
+        ),
+        tabBarShowLabel: false,
+      }}
+    />
+    <Tab.Screen
+      name="Data"
+      component={Data}
+      options={{
+        tabBarIcon: ({ color, focused }) => (
+          <AntDesign
+            name={"profile"}
+            size={focused ? 40 : 30}
+            color={focused ? colors.green : colors.blue500}
+          />
+        ),
+        tabBarShowLabel: false,
+      }}
+    />
+    <Tab.Screen
+      name="Crypto"
+      component={Crypto}
+      options={{
+        tabBarIcon: ({ color, focused, size }) => (
+          <FontAwesome
+            name={"bitcoin"}
+            size={focused ? 40 : 30}
+            color={focused ? colors.green : colors.blue500}
+          />
+        ),
+        tabBarShowLabel: false,
+      }}
+    />
+    <Tab.Screen
+      name="Profile"
+      component={Profile}
+      options={{
+        headerShown: false,
+        tabBarIcon: ({ color, focused }) => (
+          <AntDesign
+            name={"user"}
+            size={focused ? 40 : 30}
+            color={focused ? colors.green : colors.blue500}
+          />
+        ),
+        tabBarShowLabel: false,
+      }}
+    />
+  </Tab.Navigator>
 );
 
 const NonAuthRoutes = () => (
