@@ -9,19 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAuth = void 0;
+exports.authRouter = void 0;
+const express_1 = require("express");
 const firebase_1 = require("./firebase");
-const checkAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter = (0, express_1.Router)();
+exports.authRouter.post("/fetch-value", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { tokenId } = req.body;
-        const { uid } = yield firebase_1.auth.verifyIdToken(tokenId);
-        console.log(uid);
-        res.locals.uid = uid;
-        next();
+        const { uid } = res.locals;
+        const doc = yield firebase_1.fs.doc(uid).get();
+        const { lumaValue } = doc.data();
+        res.send({ lumaValue });
     }
-    catch (error) {
+    catch (e) {
+        const error = e;
         next(error);
     }
-});
-exports.checkAuth = checkAuth;
-//# sourceMappingURL=auth.js.map
+}));
+// authRouter.post(
+//   "/send-help-signal",
+//   async (
+//     req: express.Request,
+//     res: express.Response,
+//     next: express.NextFunction
+//   ) => {}
+// );
+//# sourceMappingURL=routes.js.map

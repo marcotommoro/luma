@@ -1,8 +1,19 @@
-export const firebaseAuth = (
-  req: Express.Request,
-  res: Express.Response,
-  next: any
+import express from "express";
+import { auth } from "./firebase";
+
+export const checkAuth = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
 ) => {
-  // TODO: Authentication
-  next();
+  try {
+    const { tokenId } = req.body;
+    const { uid } = await auth.verifyIdToken(tokenId);
+    console.log(uid);
+
+    res.locals.uid = uid;
+    next();
+  } catch (error) {
+    next(error);
+  }
 };

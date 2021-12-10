@@ -9,19 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAuth = void 0;
-const firebase_1 = require("./firebase");
-const checkAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { tokenId } = req.body;
-        const { uid } = yield firebase_1.auth.verifyIdToken(tokenId);
-        console.log(uid);
-        res.locals.uid = uid;
-        next();
-    }
-    catch (error) {
-        next(error);
-    }
-});
-exports.checkAuth = checkAuth;
-//# sourceMappingURL=auth.js.map
+exports.root = void 0;
+exports.root = {
+    note: ({ id }) => {
+        return 10;
+    },
+    notes: () => __awaiter(void 0, void 0, void 0, function* () {
+        return [1, 2, 3, 4, 5, 6];
+    }),
+    addNote: ({ title, description, }) => __awaiter(void 0, void 0, void 0, function* () {
+        return "aggiunta" + title + description;
+    }),
+};
+module.exports = { root: exports.root };
+//# sourceMappingURL=resolvers.js.map

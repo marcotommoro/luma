@@ -1,0 +1,16 @@
+type Query {
+  note(id: String!): Int
+  notes: [Int]!
+}
+
+type Mutation {
+  addNote(title: String!, description: String): Note!
+}
+
+type Note {
+  id: ID!
+  title: String!
+  description: String
+  color: String
+  isPinned: Boolean
+}

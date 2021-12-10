@@ -1,39 +1,39 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import admin from "firebase-admin";
-import { initializeApp } from "firebase-admin/app";
-import { getAuth } from "firebase-admin/auth";
-import { getFirestore } from "firebase-admin/firestore";
-import { config } from "./credentials/firebase-config.js";
+import { graphqlHTTP } from "express-graphql";
+import { checkAuth } from "./auth";
+import { ErrorHandler, handleError } from "./error";
+import { schema } from "./graphql/buildedSchema";
+import { root } from "./graphql/resolvers";
+import { authRouter } from "./routes";
 
 dotenv.config();
 
 const app = express();
 
-initializeApp({
-  credential: admin.credential.cert(config),
-});
-const fs = getFirestore();
-const auth = getAuth();
-
 app.use(cors());
+app.use("/auth", checkAuth, authRouter);
 
-app.get("/", async (req, res) => {
-  res.set("Content-Type", "application/json");
-  res.set("Access-Control-Allow-Origin", "*");
+app.use("/graphql", graphqlHTTP({ graphiql: true, schema, rootValue: root }));
 
-  res.send("fuck");
+// Handle route not found error.
+app.use((req, res, next) => {
+  next(new ErrorHandler(404, "Route not found"));
 });
 
-// const mintTo = () => {};
+// Handle every other app error.
+app.use(
+  (
+    error: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    handleError(error, res);
+  }
+);
 
-// app.post(
-//   "/auth/mint/",
-//   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-//     // const {} = req.body;
-//   }
-// );
+app.listen(8080);
 
-app.listen(3000);
-console.log("Listen fuck on 3000\n");
+console.log("Listen fuck on 8080\n");
