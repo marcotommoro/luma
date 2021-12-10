@@ -1,18 +1,18 @@
 ### IGNORE APP
-luma-app/node_modules/
-luma-app/.expo/
-luma-app/dist/
-luma-app/npm-debug.*
-luma-app/*.jks
-luma-app/*.p8
-luma-app/*.p12
-luma-app/*.key
-luma-app/*.mobileprovision
-luma-app/*.orig.*
-luma-app/web-build/
+app/node_modules/
+app/.expo/
+app/dist/
+app/npm-debug.*
+app/*.jks
+app/*.p8
+app/*.p12
+app/*.key
+app/*.mobileprovision
+app/*.orig.*
+app/web-build/
 
 # macOS
-luma-app/.DS_Store
+app/.DS_Store
 
 # @generated expo-cli sync-e7dcf75f4e856f7b6f3239b3f3a7dd614ee755a8
 
@@ -20,65 +20,67 @@ luma-app/.DS_Store
 
 
 # OSX
-luma-app/.DS_Store
+app/.DS_Store
 
 # Xcode
-luma-app/build/
-luma-app/*.pbxuser
-luma-app/!default.pbxuser
-luma-app/*.mode1v3
-luma-app/!default.mode1v3
-luma-app/*.mode2v3
-luma-app/!default.mode2v3
-luma-app/*.perspectivev3
-luma-app/!default.perspectivev3
-luma-app/xcuserdata
-luma-app/*.xccheckout
-luma-app/*.moved-aside
-luma-app/DerivedData
-luma-app/*.hmap
-luma-app/*.ipa
-luma-app/*.xcuserstate
-luma-app/project.xcworkspace
+app/build/
+app/*.pbxuser
+app/!default.pbxuser
+app/*.mode1v3
+app/!default.mode1v3
+app/*.mode2v3
+app/!default.mode2v3
+app/*.perspectivev3
+app/!default.perspectivev3
+app/xcuserdata
+app/*.xccheckout
+app/*.moved-aside
+app/DerivedData
+app/*.hmap
+app/*.ipa
+app/*.xcuserstate
+app/project.xcworkspace
 # Android/IntelliJ
 
-luma-app/build/
-luma-app/.idea
-luma-app/.gradle
-luma-app/local.properties
-luma-app/*.iml
-luma-app/*.hprof
+app/build/
+app/.idea
+app/.gradle
+app/local.properties
+app/*.iml
+app/*.hprof
 
 
 # node.js
-luma-app/node_modules/
-luma-app/npm-debug.log
-luma-app/yarn-error.log
+app/node_modules/
+app/npm-debug.log
+app/yarn-error.log
 
 
 # BUCK
-luma-app/buck-out/
-luma-app/\.buckd/
-luma-app/*.keystore
-luma-app/!debug.keystore
+app/buck-out/
+app/\.buckd/
+app/*.keystore
+app/!debug.keystore
 
 # Bundle artifacts
-luma-app/*.jsbundle
+app/*.jsbundle
 
 
 # CocoaPods
-luma-app/ios/Pods/
+app/ios/Pods/
 
 # Expo
-luma-app/.expo/
-luma-app/web-build/
-luma-app/dist/
+app/.expo/
+app/web-build/
+app/dist/
 
 # @end expo-cli
 
 
 ## IGNORE SMART-CONTRACT
 
-luma-smart-contract/build/
-luma-smart-contract/node_modules/
-luma-smart-contract/.env
+smart-contract/build/
+smart-contract/node_modules/
+smart-contract/.env
+
+**/node_modules
