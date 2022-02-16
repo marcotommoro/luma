@@ -19,9 +19,10 @@ export const Login = ({ navigation }: NavigationType) => {
       setError("Controlla i dati immessi che non sono corretti!");
       return;
     }
-    const error = await firebaseLoginEmailPassword(email, password);
-    console.log("errror", typeof error, error);
-    !!error && setError(error);
+    const e = await firebaseLoginEmailPassword(email, password);
+    if (e) {
+      setError(e);
+    }
 
     setSubmitDisabled(false);
   };

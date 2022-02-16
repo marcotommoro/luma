@@ -1,4 +1,5 @@
 import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { FirebaseError } from "firebase/app";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { Button, Input } from "react-native-elements";
@@ -7,11 +8,13 @@ import { color, t } from "react-native-tailwindcss";
 import { firebaseSignupEmailPassword } from "./firebaseUtils";
 import { SocialLogin, validateEmail, validatePassword } from "./utils";
 
-const ChooseRole = (): JSX.Element => {
-  const [selected, setSelected] = useState<boolean>(false);
-
-  const handleClick = () => {
-    setSelected(!selected);
+type roleProps = {
+  setRole: React.Dispatch<React.SetStateAction<string>>;
+  role: string;
+};
+const ChooseRole = ({ role, setRole }: roleProps): JSX.Element => {
+  const handleClick = (e: string) => {
+    setRole(e);
   };
 
   return (
@@ -20,22 +23,22 @@ const ChooseRole = (): JSX.Element => {
       <View style={[t.flex, t.flexRow, t.mT5]}>
         <TouchableWithoutFeedback
           style={[t.mR10, t.p5, t.shadow2xl]}
-          onPress={handleClick}
+          onPress={() => handleClick("caregiver")}
         >
           <FontAwesome5
             name="user-nurse"
-            size={100 + (!selected ? 20 : 0)}
+            size={100 + (role === "caregiver" ? 20 : 0)}
             color={color.green}
           />
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
           style={[t.p5, t.shadow2xl]}
-          onPress={handleClick}
+          onPress={() => handleClick("sick")}
         >
           <FontAwesome
             name="user"
-            size={100 + (selected ? 20 : 0)}
+            size={100 + (role !== "caregiver" ? 20 : 0)}
             color={color.greenblue}
           />
         </TouchableWithoutFeedback>
@@ -50,6 +53,7 @@ export const Signup = () => {
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<any>();
+  const [role, setRole] = useState<string>("caregiver");
 
   const handleSubmit = async () => {
     setSubmitDisabled(true);
@@ -63,15 +67,23 @@ export const Signup = () => {
       return;
     }
     console.log("controlli passati");
-    const error = await firebaseSignupEmailPassword(email, password);
-    !!error && setError(error);
+    const error: FirebaseError | any = await firebaseSignupEmailPassword(
+      email,
+      password,
+      role
+    );
+
+    if (error.code === "auth/email-already-in-use") {
+      console.log("coglione");
+      setError("L'email è gia in uso");
+    }
 
     setSubmitDisabled(false);
   };
 
   return (
     <View style={[t.flex, t.itemsCenter]}>
-      <ChooseRole />
+      <ChooseRole setRole={setRole} role={role} />
       <SocialLogin />
       <Text style={[t.textSm, t.mY2, t.textGray800]}>oppure</Text>
       <View style={[t.wFull, t.pX10]}>

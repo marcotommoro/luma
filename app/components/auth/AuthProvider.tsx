@@ -1,6 +1,5 @@
-import { User } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { auth } from "./firebase.config";
 
 type Props = {
   children?: React.ReactNode;
@@ -20,11 +19,12 @@ export const AuthProvider = ({ children }: any) => {
   const [loadingAuthState, setLoadingAuthState] = useState(true);
 
   useEffect(() => {
-    auth.onAuthStateChanged((user: User | any) => {
+    getAuth().onAuthStateChanged((user: User | any) => {
+      console.log("AUTH triggerato");
       setUser(user);
       setLoadingAuthState(false);
     });
-  }, []);
+  }, [user]);
 
   return (
     <AuthContext.Provider
