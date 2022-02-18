@@ -17,6 +17,10 @@ exports.root = {
     notes: () => __awaiter(void 0, void 0, void 0, function* () {
         return [1, 2, 3, 4, 5, 6];
     }),
+    auth: (userToken, request) => {
+        // @ts-ignore
+        return { uid: request.uid };
+    },
     addNote: ({ title, description, }) => __awaiter(void 0, void 0, void 0, function* () {
         return "aggiunta" + title + description;
     }),

@@ -8,7 +8,5 @@ const fs_1 = __importDefault(require("fs"));
 const graphql_1 = require("graphql");
 const buffer = fs_1.default.readFileSync(__dirname + "/schema.graphql");
 const fileContent = buffer.toString();
-console.log(fileContent);
 exports.schema = (0, graphql_1.buildSchema)(`${fileContent}`);
-console.log(exports.schema);
 //# sourceMappingURL=buildedSchema.js.map

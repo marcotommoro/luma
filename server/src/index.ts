@@ -1,21 +1,22 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import { graphqlHTTP } from "express-graphql";
-import { checkAuth } from "./auth";
+import expressWs from "express-ws";
+import { authMiddleware } from "./auth";
 import { ErrorHandler, handleError } from "./error";
-import { schema } from "./graphql/buildedSchema";
-import { root } from "./graphql/resolvers";
-import { authRouter } from "./routes";
-
+import { userRouter } from "./routers/routes";
 dotenv.config();
 
-const app = express();
+const baseApp = express();
+
+const instance = expressWs(baseApp);
+const { app } = instance;
 
 app.use(cors());
-app.use("/auth", checkAuth, authRouter);
-
-app.use("/graphql", graphqlHTTP({ graphiql: true, schema, rootValue: root }));
+// app.use("/auth", checkAuth, authRouter);
+app.use(express.json());
+app.use(authMiddleware);
+app.use("/user", userRouter);
 
 // Handle route not found error.
 app.use((req, res, next) => {
@@ -30,9 +31,17 @@ app.use(
     res: express.Response,
     next: express.NextFunction
   ) => {
+    console.log(error);
     handleError(error, res);
   }
 );
+
+app.ws("/need-help", (ws, req) => {
+  ws.on("message", (msg) => {
+    console.log(msg);
+  });
+  console.log("socket", "inizializzato");
+});
 
 app.listen(8080);
 

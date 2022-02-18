@@ -26,7 +26,7 @@ exports.authRouter.post("/fetch-value", (req, res, next) => __awaiter(void 0, vo
     }
 }));
 // authRouter.post(
-//   "/send-help-signal",
+//   "/",
 //   async (
 //     req: express.Request,
 //     res: express.Response,

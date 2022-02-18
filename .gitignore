@@ -84,3 +84,5 @@ smart-contract/node_modules/
 smart-contract/.env
 
 **/node_modules
+
+.env

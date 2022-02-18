@@ -9,11 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAuth = void 0;
+exports.authMiddleware = void 0;
 const firebase_1 = require("./firebase");
-const checkAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.headers);
     try {
-        const { tokenId } = req.body;
+        const tokenId = req.headers.authorization;
         const { uid } = yield firebase_1.auth.verifyIdToken(tokenId);
         console.log(uid);
         res.locals.uid = uid;
@@ -23,5 +24,5 @@ const checkAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         next(error);
     }
 });
-exports.checkAuth = checkAuth;
+exports.authMiddleware = authMiddleware;
 //# sourceMappingURL=auth.js.map
