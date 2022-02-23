@@ -31,7 +31,7 @@ const Home = () => {
       console.log("Connected to ", macAddress);
     });
 
-    let serviceId;
+    let serviceId: any;
     BLManager.retrieveServices(macAddress).then((data) => {
       const { advertising } = data;
       serviceId = advertising.serviceUUIDs[0];
