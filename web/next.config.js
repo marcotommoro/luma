@@ -2,10 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   typescript: { ignoreBuildErrors: true },
-  experimental: {
-    outputStandalone: true,
-  },
-  assetPrefix: ".",
+  // assetPrefix: ".",
 };
 
 module.exports = nextConfig;
