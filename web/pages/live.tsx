@@ -1,4 +1,4 @@
-import { doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, getFirestore, onSnapshot, updateDoc } from "firebase/firestore";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { SiSpinrilla } from "react-icons/si";
@@ -13,17 +13,20 @@ const Live: NextPage<Props> = ({}) => {
   useEffect(() => {
     if (!activeUser) return;
 
-    setDoc(doc(getFirestore(), "live", activeUser), { active: true });
+    updateDoc(doc(getFirestore(), "users", activeUser), { isLive: true });
+
     const unsub = onSnapshot(doc(getFirestore(), "live", activeUser), (doc) => {
       try {
         const { heart, sp02 } = doc.data();
+        if (!sp02) throw new Error("No data");
         setUserData({ heart: `${heart} bpm `, sp02: `${sp02} %` });
       } catch (error) {
         setUserData({ heart: "", sp02: "" });
       }
     });
     return () => {
-      setDoc(doc(getFirestore(), "live", activeUser), { active: false });
+      updateDoc(doc(getFirestore(), "users", activeUser), { isLive: false });
+      console.log("cancellato in teoria");
     };
   }, [activeUser]);
 

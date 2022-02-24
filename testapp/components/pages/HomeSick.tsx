@@ -1,18 +1,56 @@
-import { doc, onSnapshot, Unsubscribe } from "firebase/firestore";
-import { useRef, useState } from "react";
+import { getAuth } from "firebase/auth";
+import { doc, getFirestore, onSnapshot, Unsubscribe } from "firebase/firestore";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { Button } from "react-native-elements";
 import { t } from "react-native-tailwindcss";
-import { removeHelp, setHelp } from "../api/user";
+import {
+  getUserInfo,
+  removeHelp,
+  setHelp,
+  startSendingDataLive,
+  stopSendingDataLive,
+  writeData,
+} from "../api/user";
 import { db } from "../auth/firebase.config";
+import { disconnectBluethoot, readBluethootValue } from "../bluethoot";
 
 const Home = () => {
+  const [isConnected, setIsConnected] = useState(false);
+  const [bpm, setBpm] = useState<number>(0);
   const [emergencyState, setEmergencyState] = useState(0);
   const [emergencyMessage, setEmergencyMessage] = useState("");
-  const [isBluetoothConnected, setIsBluetoothConnected] = useState(false);
-  const [macAddress, setMacAddress] = useState("");
+  const [userData, setUserData] = useState();
+
   const docId = useRef<string>("");
+  const timerIntervalId = useRef<any>();
   const unsubscriber = useRef<Unsubscribe>();
+
+  useEffect(() => {
+    const uid = getAuth().currentUser?.uid;
+    if (!uid) return;
+
+    getUserInfo().then((ui) => setUserData(ui));
+
+    onSnapshot(doc(getFirestore(), "users", uid), (d) => {
+      if (!d.exists) return;
+
+      if (d.data().isLive) {
+        const v = Math.round(Math.random() * 100);
+        console.log("cominciioooo");
+        startSendingDataLive(v);
+      } else {
+        stopSendingDataLive();
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    setIsConnected(false);
+    return () => {
+      disconnectBluethoot();
+    };
+  }, []);
 
   const handleHelp = async () => {
     docId.current = await setHelp();
@@ -33,6 +71,26 @@ const Home = () => {
     );
   };
 
+  const handleConnect = async () => {
+    timerIntervalId.current = setInterval(async () => {
+      setIsConnected(true);
+      const value = await readBluethootValue();
+      console.log("value", value);
+      setBpm(value[0]);
+      writeData(value[0]);
+    }, 1000);
+  };
+
+  const handleDisconnect = () => {
+    clearInterval(timerIntervalId.current);
+    setTimeout(() => {
+      console.log("disconnected");
+      disconnectBluethoot();
+      setBpm(0);
+      setIsConnected(false);
+    }, 1100);
+  };
+
   const handleRemove = async () => {
     removeHelp(docId.current);
     setEmergencyState(0);
@@ -40,7 +98,18 @@ const Home = () => {
 
   return (
     <View>
-      <Text>Sick</Text>
+      <View>
+        {!isConnected ? (
+          <View>
+            <Button title="Connect" onPress={handleConnect} />
+          </View>
+        ) : (
+          <View>
+            <Text style={[t.textCenter, t.text4xl]}>{bpm} BPM</Text>
+            <Button title="Disonnect" onPress={handleDisconnect} />
+          </View>
+        )}
+      </View>
 
       {emergencyState ? (
         <View>

@@ -25,6 +25,7 @@ const serviceId = "57a806f7-ab55-4932-ada2-5f2c5a94b3f7";
 export const startBluethootModule = async () => {
   return BLManager.start({ showAlert: false });
 };
+startBluethootModule();
 
 // export const startBluethootScan = () => {
 //   BLManager.scan([], 5, false).then(() => {
@@ -43,7 +44,13 @@ export const connectBluethoot = async () => {
 };
 
 export const readBluethootValue = async (): Promise<any> => {
-  return BLManager.read(macAddress, serviceId, serviceId);
+  try {
+    return await BLManager.read(macAddress, serviceId, serviceId);
+  } catch (error) {
+    // await disconnectBluethoot();
+    await connectBluethoot();
+    throw new Error();
+  }
 };
 
 export const disconnectBluethoot = () => {

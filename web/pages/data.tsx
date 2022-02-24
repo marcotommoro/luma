@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Chart from "../components/Chart";
 import Users from "../components/Users";
 import { generateRandomData, getAllUserData } from "../utils";
-type Props = {};
 
 const Data: NextPage<Props> = ({}) => {
   const [userData, setUserData] = useState([]);
