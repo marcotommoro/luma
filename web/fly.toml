@@ -1,4 +1,4 @@
-# fly.toml file generated for luma on 2022-02-23T16:25:10+01:00
+# fly.toml file generated for luma on 2022-02-24T12:08:21+01:00
 
 app = "luma"
 
@@ -6,11 +6,7 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-[build]
-  builder = "heroku/buildpacks:20"
-
 [env]
-  PORT = "3000"
 
 [experimental]
   allowed_public_ports = []
@@ -18,7 +14,7 @@ processes = []
 
 [[services]]
   http_checks = []
-  internal_port = 3000
+  internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
   script_checks = []

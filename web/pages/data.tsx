@@ -55,7 +55,7 @@ const Data: NextPage<Props> = ({}) => {
           <div className="flex mt-5">
             <Users activeUser={activeUser} setActiveUser={setActiveUser} />
             <div>
-              <Chart
+              <Chawrt
                 domain={[30, 150]}
                 title="heart rate"
                 typo="heart"
