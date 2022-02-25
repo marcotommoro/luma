@@ -1,4 +1,5 @@
 import { getAuth } from "@firebase/auth";
+import * as Location from "expo-location";
 import {
   addDoc,
   collection,
@@ -6,6 +7,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  increment,
   query,
   serverTimestamp,
   setDoc,
@@ -31,7 +33,15 @@ export const getUserInfo = async () => {
 
 export const setHelp = async (): Promise<string> => {
   //TODO: get location
-  const location = { latitude: 1.24534645, longitude: 2.2345364 };
+  let location = { latitude: 1.24534645, longitude: 2.2345364 };
+  try {
+    location = (await Location.getCurrentPositionAsync()).coords;
+  } catch (error) {
+    console.log("ciao", error);
+  }
+
+  console.log(location);
+
   const doc = await addDoc(collection(db, "emergency"), {
     uid: auth.currentUser?.uid,
     location,
@@ -123,4 +133,11 @@ export const stopSendingDataLive = () => {
   deleteDoc(doc(db, "live", getAuth().currentUser.uid));
 };
 
-export const writeLiveData = async (heart: number) => {};
+export const donateLuma = (uidSupporter: string, qty: number) => {
+  updateDoc(doc(db, "users", uidSupporter), {
+    quantity_luma: increment(qty),
+  });
+  updateDoc(doc(db, "users", getAuth().currentUser.uid), {
+    quantity_luma: increment(-qty),
+  });
+};

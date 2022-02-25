@@ -28,12 +28,13 @@ const Home = () => {
   const unsubscriber = useRef<Unsubscribe>();
   const [isActiveHelping, setIsActiveHelping] = useState("");
   const [patientData, setPatientData] = useState<PatientDataType | any>();
+  const [emergencyDoc, setEmergencyDoc] = useState({});
 
   const handleListen = async () => {
     const docs: object = await getEmergency();
     await setListHelp(docs);
 
-    const unsubscribe = onSnapshot(queryEmergency(), (snapshot) => {
+    onSnapshot(queryEmergency(), (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const { location, uid } = change.doc.data();
@@ -46,6 +47,7 @@ const Home = () => {
         if (change.type === "removed") {
           const state = listHelp;
           const id = change.doc.id;
+
           setListHelp((obj) => ({ ...obj, [id]: undefined }));
         }
       });
@@ -53,18 +55,18 @@ const Home = () => {
   };
 
   const handleHelping = (key: string, value: object) => {
-    if (unsubscriber.current) unsubscriber.current();
     setIsActiveHelping(key);
     setHelpingComing(key);
+    setEmergencyDoc(value);
     setPatientData(value);
   };
 
   const handleCancelHelping = async () => {
     setIsActiveHelping("");
     setListHelp({});
-    await setHelpingNotComing(isActiveHelping);
+    setHelpingNotComing(isActiveHelping);
     setPatientData(null);
-    handleListen();
+    // handleListen();
   };
 
   const handleMaps = () => {
@@ -73,7 +75,7 @@ const Home = () => {
       android: "geo:0,0?q=",
     });
 
-    const latLng = `${patientData.latitude},${patientData.longitude}`;
+    const latLng = `${emergencyDoc.location.latitude},${emergencyDoc.location.longitude}`;
     const label = "Brutta merda";
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
@@ -100,6 +102,7 @@ const Home = () => {
                   latitude = value.location.latitude;
                   longitude = value.location.longitude;
                 }
+                if (!latitude || !longitude) return;
                 return (
                   <View key={key}>
                     <Card key={key}>

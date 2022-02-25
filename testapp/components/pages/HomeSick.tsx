@@ -5,6 +5,7 @@ import { ActivityIndicator, Text, View } from "react-native";
 import { Button } from "react-native-elements";
 import { t } from "react-native-tailwindcss";
 import {
+  donateLuma,
   getUserInfo,
   removeHelp,
   setHelp,
@@ -21,6 +22,7 @@ const Home = () => {
   const [emergencyState, setEmergencyState] = useState(0);
   const [emergencyMessage, setEmergencyMessage] = useState("");
   const [userData, setUserData] = useState();
+  const [uidSupporter, setUidSupporter] = useState("");
 
   const docId = useRef<string>("");
   const timerIntervalId = useRef<any>();
@@ -37,7 +39,6 @@ const Home = () => {
 
       if (d.data().isLive) {
         const v = Math.round(Math.random() * 100);
-        console.log("cominciioooo");
         startSendingDataLive(v);
       } else {
         stopSendingDataLive();
@@ -63,9 +64,13 @@ const Home = () => {
         if (data && !data.supportComing) {
           setEmergencyState(1);
           setEmergencyMessage("Hai inviato la richiesta di soccorso");
+          setUidSupporter("");
         } else if (data && data.supportComing) {
           setEmergencyState(2);
-          setEmergencyMessage("I soccorsi stanno arrivando");
+          setEmergencyMessage(
+            `I soccorsi stanno arrivando (${data.uidSupporter}).`
+          );
+          setUidSupporter(data.uidSupporter);
         }
       }
     );
@@ -94,6 +99,12 @@ const Home = () => {
   const handleRemove = async () => {
     removeHelp(docId.current);
     setEmergencyState(0);
+    setUidSupporter("");
+  };
+
+  const handleDonate = () => {
+    handleRemove();
+    donateLuma(uidSupporter, userData.quantity_luma);
   };
 
   return (
@@ -116,7 +127,14 @@ const Home = () => {
           <Text style={[t.textCenter]}>{emergencyMessage}</Text>
           <ActivityIndicator size="large" color="#00ff00" />
           <Button title={"CANCEL"} onPress={handleRemove} />
-          <Button title={"Conferma il soccorso e dona dei LUMA"} />
+          {emergencyState === 2 ? (
+            <Button
+              title={`Conferma il soccorso e dona ${
+                userData.quantity_luma / 2
+              } LUMA`}
+              onPress={handleDonate}
+            />
+          ) : null}
         </View>
       ) : (
         <Button title={"NEED HELP"} style={[t.bgRed100]} onPress={handleHelp} />
