@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import Swiper from "react-native-swiper";
 import { color, colors, t } from "react-native-tailwindcss";
-import { GRANDFATHER, HEART } from "../utils/images";
+import { GRANDFATHER, HEART, LOVE } from "../utils/images";
 
 type Props = {
   title: string;
@@ -16,35 +16,19 @@ type Props = {
   text: string;
 };
 
-// export const SwiperItem = ({ title, text, image }: Props) => {
-//   useEffect(() => {
-//     console.log("ciao", title, text, image);
-//   }, []);
-//   return (
-//     <View
-//       testID={title}
-//       style={[t.flex, t.justifyCenter, t.flex1, t.itemsCenter]}
-//     >
-//       <Image style={[t.flex1, t.resizeContain]} source={image} />
-//       <View style={[t.flex1]}>
-//         <Text style={[t.textGreenblue, t.text3xl, t.fontBold, t.textCenter]}>
-//           {title}
-//         </Text>
-//         <Text style={[t.textGreenblue, t.text3xl, t.fontBold]}>{text}</Text>
-//       </View>
-//     </View>
-//   );
-// };
-
 export const PresentationSwiper = ({ navigation }: NavigationType) => {
   useEffect(() => {
     console.log("Heart", HEART, typeof HEART);
   }, []);
 
   const data = [
-    { title: "Title", image: HEART, text: "Figa questo è l'abstract" },
-    { title: "Title2", image: GRANDFATHER, text: "Figa questo è l'abstract" },
-    { title: "Title3", image: HEART, text: "Figa questo è l'abstract" },
+    { title: "PREVENTION", image: HEART, text: "Important as the pussy" },
+    {
+      title: "MONITORING",
+      image: GRANDFATHER,
+      text: "Real Time Healt Status Monitoring System",
+    },
+    { title: "P2P HELP", image: LOVE, text: "Everyone can help" },
   ];
 
   return (
@@ -54,21 +38,38 @@ export const PresentationSwiper = ({ navigation }: NavigationType) => {
           <View
             key={`${e.title}-${i}`}
             testID={e.title}
-            style={[t.flex, t.justifyCenter, t.flex1, t.itemsCenter]}
+            style={[t.flex, t.justifyCenter, t.flex1, t.itemsCenter, t.mT10]}
           >
-            <Image style={[t.flex1, t.resizeContain]} source={e.image} />
-            <View style={[t.flex1]}>
+            <Image
+              style={[
+                t.flex1,
+                t.resizeContain,
+                { tintColor: "#22577A" },
+                // t.p10,
+              ]}
+              source={e.image}
+            />
+
+            <View style={[t.flex1, t.mT10]}>
               <Text
-                style={[t.textGreenblue, t.text3xl, t.fontBold, t.textCenter]}
+                style={[t.textGreenblue, t.text5xl, t.fontBold, t.textCenter]}
               >
                 {e.title}
               </Text>
-              <Text style={[t.textGreenblue, t.text3xl, t.fontBold]}>
+              <Text
+                style={[
+                  t.textBlue500,
+                  t.text3xl,
+                  t.fontBold,
+                  t.textCenter,
+                  t.pT8,
+                ]}
+              >
                 {e.text}
               </Text>
 
               {data.length - 1 === i ? (
-                <View style={[t.justifyCenter, t.mT20, t.mX10]}>
+                <View style={[t.justifyCenter, t.m8, t.mX10]}>
                   <TouchableHighlight
                     style={[
                       t.bgGreen,
