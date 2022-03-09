@@ -1,9 +1,0 @@
-type Query {
-  note(id: String!): Int
-  notes: [Int]!
-}
-
-type Mutation {
-  addNote(title: String!, description: String): Int!
-  auth(userToken: String): String
-}
