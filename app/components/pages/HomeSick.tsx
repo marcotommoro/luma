@@ -77,9 +77,12 @@ const Home = () => {
   };
 
   const handleConnect = async () => {
+    console.log("son dentro 1");
     timerIntervalId.current = setInterval(async () => {
       setIsConnected(true);
       const value = await readBluethootValue();
+      console.log("son dentro 2");
+
       console.log("value", value);
       setBpm(value[0]);
       writeData(value[0]);
@@ -93,7 +96,7 @@ const Home = () => {
       disconnectBluethoot();
       setBpm(0);
       setIsConnected(false);
-    }, 1100);
+    }, 1000);
   };
 
   const handleRemove = async () => {

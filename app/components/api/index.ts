@@ -2,7 +2,6 @@ import axios from "axios";
 import { auth } from "../auth/firebase.config";
 export const test = async () => {
   try {
-    console.log("frocio");
     const t = await auth.currentUser?.getIdToken();
     const { data } = await axios.post(
       "http://localhost:8080/user/fetch-value/",
@@ -10,7 +9,6 @@ export const test = async () => {
         tokenId: t,
       }
     );
-    console.log(data);
   } catch (error) {
     console.log(error);
   }

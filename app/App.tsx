@@ -8,6 +8,7 @@ import { auth } from "./components/auth/firebase.config";
 import { AuthRoutes, NonAuthRoutes } from "./components/routes";
 
 LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreAllLogs();
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);

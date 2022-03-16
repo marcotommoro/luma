@@ -36,7 +36,6 @@ startBluethootModule();
 export const connectBluethoot = async () => {
   try {
     await BLManager.connect(macAddress);
-    console.log("connected");
     return true;
   } catch (error) {
     return false;
@@ -54,5 +53,7 @@ export const readBluethootValue = async (): Promise<any> => {
 };
 
 export const disconnectBluethoot = () => {
-  BLManager.disconnect(macAddress);
+  BLManager.disconnect(macAddress)
+    .then()
+    .catch((e) => console.log("cannot disconnect", e));
 };

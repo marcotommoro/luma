@@ -40,8 +40,6 @@ export const setHelp = async (): Promise<string> => {
     console.log("ciao", error);
   }
 
-  console.log(location);
-
   const doc = await addDoc(collection(db, "emergency"), {
     uid: auth.currentUser?.uid,
     location,
@@ -78,10 +76,13 @@ export const setHelpingNotComing = async (docId: string) => {
   });
 };
 let lastLoad = moment();
+
 export const writeData = async (heart: number) => {
   if (heart > 200 || heart < 20) return;
 
   if (moment().diff(lastLoad, "second") < 30) return;
+  lastLoad = moment();
+  console.log("SCRIVO DATI SU FB");
 
   addDoc(collection(db, "data"), {
     heart,
@@ -134,10 +135,11 @@ export const stopSendingDataLive = () => {
 };
 
 export const donateLuma = (uidSupporter: string, qty: number) => {
+  const _qty = Math.floor(qty / 2);
   updateDoc(doc(db, "users", uidSupporter), {
-    quantity_luma: increment(qty),
+    quantity_luma: increment(_qty),
   });
   updateDoc(doc(db, "users", getAuth().currentUser.uid), {
-    quantity_luma: increment(-qty),
+    quantity_luma: increment(-_qty),
   });
 };

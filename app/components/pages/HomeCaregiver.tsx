@@ -76,7 +76,7 @@ const Home = () => {
     });
 
     const latLng = `${emergencyDoc.location.latitude},${emergencyDoc.location.longitude}`;
-    const label = "Brutta merda";
+    const label = "Corri a salvarlo!";
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`,

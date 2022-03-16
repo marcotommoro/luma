@@ -12,7 +12,11 @@ React Native app that implement both caregiver and patient functions.
 Ethereum smart contract implementing the ERC-20 standard for token
 
 ## Web
-Next.js app implementing all the monitoring functions for doctors
+Next.js app implementing all the monitoring functions for doctors. <br>
+**[Live Demo](https://lumaweb.fly.dev/)**
 
 ## Server (Deprecated)
 Express server to implement security. Too long
+
+## Arduino
+Refer to [Luca Mantovani repo](https://github.com/lucaamantovani/LUMA-Monitoring-System)
